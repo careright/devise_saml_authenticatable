@@ -182,6 +182,33 @@ Upon successful login the user is redirected to the Devise `user_root_path`.
 
 Create a YAML file (`config/attribute-map.yml`) that maps SAML attributes with your model's fields:
 
+There are two ways to map SAML attributes to User attributes:
+
+- [initializer](#attribute-map-initializer)
+- [config file](#attribute-map-config-file)
+
+The attribute mappings are very dependent on the way the IdP encodes the attributes.
+In these examples the attributes are given in URN style.
+Other IdPs might provide them as OID's, or by other means.
+
+In `config/initializers/devise.rb` (see above), add an attribute map resolver.
+The resolver gets the [SAML response from the IdP](https://github.com/onelogin/ruby-saml/blob/master/lib/onelogin/ruby-saml/response.rb) so it can decide which attribute map to load.
+If you only have one IdP, you can use the config file above, or just return a single hash.
+
+```ruby
+  # config/initializers/devise.rb
+  Devise.setup do |config|
+    ...
+    # ==> Configuration for :saml_authenticatable
+
+    config.saml_attribute_map_resolver = "MyAttributeMapResolver"
+  end
+```
+
+##### Attribute map config file
+
+Create a YAML file (`config/attribute-map.yml`) that maps SAML attributes with your model's fields:
+
 ```yaml
   # attribute-map.yml
 
